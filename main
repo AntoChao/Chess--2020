@@ -1,0 +1,396 @@
+# El programa falta un par de reglas y mov diagonal y caballo, pero la idea esta, el resto es calculo matematico
+# Hay que mejorar el uso de las clases y las listas. Talvez podria hacer algo con los punteros. Ademas aprender relacion interaccion grafico.
+# no uso de Numpy, librerias...
+class piezas:
+    def __init__(self, color, tipo, id, lugar):
+        self.color = color
+        self.tipo = tipo
+        self.id = id
+        self.lugar = lugar
+
+    def nombretotal(self):
+        return "{}{}{}".format(self.color, self.tipo[:3], self.id)
+
+    def peon(self, destino):
+        inicial = self.lugar;
+        verificacion = checkvertical(self, destino)
+        if verificacion == True:
+            moverpiezas(self, inicial)
+        else:
+            print("error")
+
+    def torre(self, destino):
+        inicial = self.lugar;
+        verificacion = checkvertical(self, destino)
+        if verificacion == True:
+            moverpiezas(self, inicial)
+        else:
+            print("lalalala")
+            verificacion = checkhorizontal(self, destino)
+            if verificacion == True:
+                print("zazaza")
+                moverpiezas(self, inicial)
+
+    def caballo(self):
+        moverpiezas(self)
+
+    def alfiles(self):
+        moverpiezas(self)
+
+    def rey(self, destino):
+        inicial = self.lugar;
+        verificacion = checkvertical(self, destino)
+        if verificacion == True:
+            moverpiezas(self, inicial)
+        else:
+            verificacion = checkhorizontal(self, destino)
+            if verificacion == True:
+                moverpiezas(self, inicial)
+
+    def reina(self):
+        moverpiezas(self)
+
+
+# funciones:
+# Mostrar el tablero
+def mostrartabla():
+    row_ini = 0
+    row_final = 8
+    print(" ")
+    for i in range(0, 8):
+        #for j in range(0, 8):
+        #    if type(Tablero[8*i+j]) == int:
+        #        print("miauu")
+        #        print("  " + str(Tablero[8*i+j]) +"  ")
+        #    else:
+        #        print("wanggg")
+        #        print(Tablero[8*i+j])
+        print(Tablero[row_ini:row_final])
+        row_ini += 8
+        row_final += 8
+
+
+# Mover piezas
+def moverpiezas(self,inicial):
+    Tablero[self.lugar] = esa.nombretotal()
+    Tablero[inicial] = inicial
+
+
+# Operaciones con las piezas
+def ubicarpiezas(esa):
+    # ubicar la pieza
+    for i in range(0, 63):
+        if esa.nombretotal() == Tablero[i]:
+            return i
+
+#rehacer, cambiarlos, que lugar sea lugar de la pieza y ubicacion es el lugar que quiere ir, facil para futuro
+#ubicacion = el spot que esta la pieza, lugar = el spot que quiere ir la pieza
+# llamar funcion de pieza correspondiente
+def piezacorrespondiente(lugar):
+    if vtipo == "peon":
+        esa.peon(lugar)
+    elif vtipo == "torre":
+        esa.torre(lugar)
+    elif vtipo == "caballo":
+        esa.caballo(lugar)
+    elif vtipo == "alfiles":
+        esa.alfiles(lugar)
+    elif vtipo == "rey":
+        esa.rey(lugar)
+    elif vtipo == "reina":
+        esa.reina(lugar)
+
+def checkvertical(self, destino):
+    if vtipo == "peon" or vtipo == "rey":
+        #print(type(self.lugar))
+        #print(type(destino))
+        distancia = (destino-self.lugar)/8
+        if ((destino-self.lugar)%8) == 0 and abs(distancia)==1:
+            if (distancia > 0):
+                self.lugar += 8
+                letra = Tablero[self.lugar]
+                if str(letra)[:1] != self.color:
+                    # si no empieza con el same color, vuelve true que lo puede reemplazar
+                    print("sale True")
+                    return True
+                else:
+                    # hay una pieza de same color, hay que anular la accion
+                    print("sale False")
+                    return False
+            elif (distancia < 0):
+                self.lugar -= 8
+                letra = Tablero[self.lugar]
+                if str(letra)[:1] != self.color:
+                    # si no empieza con el same color, vuelve true que lo puede reemplazar
+                    print("sale True")
+                    return True
+                else:
+                    # hay una pieza de same color, hay que anular la accion
+                    print("sale False")
+                    return False
+            else:
+                print("No ha movido la pieza")
+        else:
+            return False
+    elif vtipo == "torre" or vtipo == "reina":
+        distancia = (destino - self.lugar) // 8
+        vueltas = abs(distancia)
+        verificacion = False
+        print("distacia es: " + str(distancia))
+        print("vueltas es: " + str(vueltas))
+        if ((destino-self.lugar)%8) == 0:
+            #incorrecto, porque no puede usar return si tiene un for
+            for i in range(0, vueltas):
+                if (distancia > 0):
+                    print("lugar de la pieza es: " + str(self.lugar))
+                    self.lugar += 8
+                    letra = Tablero[self.lugar]
+                    if str(letra)[:1] != self.color:
+                        # si no empieza con el same color, vuelve true que lo puede reemplazar
+                        print("sale True")
+                        verificacion = True
+                    else:
+                        # hay una pieza de same color, hay que anular la accion
+                        print("sale False")
+                        verificacion = False
+                        break
+                elif (distancia < 0):
+                    print("lugar1 de la pieza es: " + str(self.lugar))
+                    self.lugar -= 8
+                    print("lugar2 de la pieza es: " + str(self.lugar))
+                    letra = Tablero[self.lugar]
+                    if str(letra)[:1] != self.color:
+                        # si no empieza con el same color, vuelve true que lo puede reemplazar
+                        print(str(letra)[:1])
+                        print(self.color)
+                        print("sale True")
+                        verificacion = True
+                    else:
+                        # hay una pieza de same color, hay que anular la accion
+                        print("sale False")
+                        verificacion = False
+                        break
+                else:
+                    print("No ha movido la pieza")
+            return verificacion
+        else:
+            return False
+
+def checkhorizontal(self, destino):
+    if vtipo == "rey":
+        distancia = (destino - self.lugar)
+        if abs(distancia) == 1:
+            if (distancia > 0):
+                self.lugar += 1
+                letra = Tablero[self.lugar]
+                if str(letra)[:1] != self.color:
+                    # si no empieza con el same color, vuelve true que lo puede reemplazar
+                    print("sale True")
+                    return True
+                else:
+                    # hay una pieza de same color, hay que anular la accion
+                    print("sale False")
+                    return False
+            elif (distancia < 0):
+                self.lugar -= 1
+                letra = Tablero[self.lugar]
+                if str(letra)[:1] != self.color:
+                    # si no empieza con el same color, vuelve true que lo puede reemplazar
+                    print("sale True")
+                    return True
+                else:
+                    # hay una pieza de same color, hay que anular la accion
+                    print("sale False")
+                    return False
+            else:
+                print("No ha movido la pieza")
+        else:
+            return False
+
+    elif vtipo == "torre" or vtipo == "reina":
+        distancia = (destino - self.lugar)
+        verificacion = False
+
+        #ubicar que fila esta (su rango min y max)
+        row_ini = 0
+        row_final = 8
+        for i in range(0, 8):
+            if row_ini <= self.lugar <= row_final:
+                break
+            else:
+                row_ini += 8
+                row_final += 8
+
+        print(type(self.lugar))
+        print(self.lugar)
+        print(row_ini)
+        print(row_final)
+
+        if row_ini <= destino <= row_final:
+            if (distancia > 0):
+                for i in range(self.lugar, destino):
+                    self.lugar += 1
+                    letra = Tablero[self.lugar]
+                    if str(letra)[:1] != self.color:
+                        # si no empieza con el same color, vuelve true que lo puede reemplazar
+                        print("sale True")
+                        verificacion = True
+                    else:
+                        # hay una pieza de same color, hay que anular la accion
+                        print("sale False")
+                        verificacion = False
+                        break
+                return  verificacion
+            elif (distancia < 0):
+                for i in range(destino, self.lugar):
+                    self.lugar -= 1
+                    letra = Tablero[self.lugar]
+                    if str(letra)[:1] != self.color:
+                        # si no empieza con el same color, vuelve true que lo puede reemplazar
+                        print("sale True")
+                        verificacion = True
+                    else:
+                        # hay una pieza de same color, hay que anular la accion
+                        print("sale False")
+                        verificacion = False
+                        break
+                return verificacion
+            else:
+                print("No ha movido la pieza")
+        else:
+            return False
+
+    else:
+        print("no ha movido la pieza")
+    # divide en tipo rey o torre/reina
+
+
+# Crear piezas:
+# Blanco
+Peon_B_1 = piezas("B", "peon", 1, 48)
+Peon_B_2 = piezas("B", "peon", 2, 49)
+Peon_B_3 = piezas("B", "peon", 3, 50)
+Peon_B_4 = piezas("B", "peon", 4, 51)
+Peon_B_5 = piezas("B", "peon", 5, 52)
+Peon_B_6 = piezas("B", "peon", 6, 53)
+Peon_B_7 = piezas("B", "peon", 7, 54)
+Peon_B_8 = piezas("B", "peon", 8, 55)
+
+Torre_B_1 = piezas("B", "torre", 1, 56)
+Torre_B_2 = piezas("B", "torre", 2, 63)
+
+Caballo_B_1 = piezas("B", "caballo", 1, 57)
+Caballo_B_2 = piezas("B", "caballo", 2, 62)
+
+Alfiles_B_1 = piezas("B", "alfiles", 1, 58)
+Alfiles_B_2 = piezas("B", "alfiles", 2, 61)
+
+Rey_B_1 = piezas("B", "rey", 1, 59)
+
+Reina_B_1 = piezas("B", "reina", 1, 60)
+
+# Negro
+Peon_N_1 = piezas("N", "peon", 1, 8)
+Peon_N_2 = piezas("N", "peon", 2, 9)
+Peon_N_3 = piezas("N", "peon", 3, 10)
+Peon_N_4 = piezas("N", "peon", 4, 11)
+Peon_N_5 = piezas("N", "peon", 5, 12)
+Peon_N_6 = piezas("N", "peon", 6, 13)
+Peon_N_7 = piezas("N", "peon", 7, 14)
+Peon_N_8 = piezas("N", "peon", 8, 15)
+
+Torre_N_1 = piezas("N", "torre", 1, 0)
+Torre_N_2 = piezas("N", "torre", 2, 7)
+
+Caballo_N_1 = piezas("N", "caballo", 1, 1)
+Caballo_N_2 = piezas("N", "caballo", 2, 6)
+
+Alfiles_N_1 = piezas("N", "alfiles", 1, 2)
+Alfiles_N_2 = piezas("N", "alfiles", 2, 5)
+
+Rey_N_1 = piezas("N", "rey", 1, 3)
+
+Reina_N_1 = piezas("N", "reina", 1, 4)
+
+# Inicio del juego
+
+# Valores iniciales
+Ronda = 0
+Tablero = []
+
+# Crear el tablero inicial
+Tablero = [nums for nums in range(0, 64)]
+
+# Piezas blancas
+Tablero[Peon_B_1.lugar] = Peon_B_1.nombretotal()
+Tablero[Peon_B_2.lugar] = Peon_B_2.nombretotal()
+Tablero[Peon_B_3.lugar] = Peon_B_3.nombretotal()
+Tablero[Peon_B_4.lugar] = Peon_B_4.nombretotal()
+Tablero[Peon_B_5.lugar] = Peon_B_5.nombretotal()
+Tablero[Peon_B_6.lugar] = Peon_B_6.nombretotal()
+Tablero[Peon_B_7.lugar] = Peon_B_7.nombretotal()
+Tablero[Peon_B_8.lugar] = Peon_B_8.nombretotal()
+
+Tablero[Caballo_B_1.lugar] = Caballo_B_1.nombretotal()
+Tablero[Caballo_B_2.lugar] = Caballo_B_2.nombretotal()
+
+Tablero[Torre_B_1.lugar] = Torre_B_1.nombretotal()
+Tablero[Torre_B_2.lugar] = Torre_B_2.nombretotal()
+
+Tablero[Alfiles_B_1.lugar] = Alfiles_B_1.nombretotal()
+Tablero[Alfiles_B_2.lugar] = Alfiles_B_2.nombretotal()
+
+Tablero[Rey_B_1.lugar] = Rey_B_1.nombretotal()
+
+Tablero[Reina_B_1.lugar] = Reina_B_1.nombretotal()
+
+# Piezas Negras
+Tablero[Peon_N_1.lugar] = Peon_N_1.nombretotal()
+Tablero[Peon_N_2.lugar] = Peon_N_2.nombretotal()
+Tablero[Peon_N_3.lugar] = Peon_N_3.nombretotal()
+Tablero[Peon_N_4.lugar] = Peon_N_4.nombretotal()
+Tablero[Peon_N_5.lugar] = Peon_N_5.nombretotal()
+Tablero[Peon_N_6.lugar] = Peon_N_6.nombretotal()
+Tablero[Peon_N_7.lugar] = Peon_N_7.nombretotal()
+Tablero[Peon_N_8.lugar] = Peon_N_8.nombretotal()
+
+Tablero[Torre_N_1.lugar] = Torre_N_1.nombretotal()
+Tablero[Torre_N_2.lugar] = Torre_N_2.nombretotal()
+
+Tablero[Caballo_N_1.lugar] = Caballo_N_1.nombretotal()
+Tablero[Caballo_N_2.lugar] = Caballo_N_2.nombretotal()
+
+Tablero[Alfiles_N_1.lugar] = Alfiles_N_1.nombretotal()
+Tablero[Alfiles_N_2.lugar] = Alfiles_N_2.nombretotal()
+
+Tablero[Rey_N_1.lugar] = Rey_N_1.nombretotal()
+
+Tablero[Reina_N_1.lugar] = Reina_N_1.nombretotal()
+
+# Programa main
+while True:
+    mostrartabla()
+    ubicacion = 0;
+    if Ronda % 2 == 0:
+        print("Ronda de jugador blanco")
+        vtipo = input("Ingrese el nombre de la pieza (peon, torre, caballo, alfiles, rey o reina): ")
+        vid = input("Ingrese el id de dicha pieza elegida: ")
+        lugar = input("El lugar que quiere mover la pieza: ")
+
+        esa = piezas("B", vtipo, vid, ubicacion)
+        ubicacion = ubicarpiezas(esa)
+        esa = piezas("B", vtipo, vid, ubicacion)
+        piezacorrespondiente(int(lugar))
+
+    else:
+        print("Ronda de jugador negro")
+        vtipo = input("Ingrese el nombre de la pieza (peon, torre, caballo, alfiles, rey o reina): ")
+        vid = input("Ingrese el id de dicha pieza elegida: ")
+        lugar = input("El lugar que quiere mover la pieza: ")
+
+        esa = piezas("N", vtipo, vid, ubicacion)
+        ubicacion = ubicarpiezas(esa)
+        esa = piezas("N", vtipo, vid, ubicacion)
+        piezacorrespondiente(int(lugar))
+
+    Ronda += 1
